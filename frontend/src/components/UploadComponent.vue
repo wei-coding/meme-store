@@ -1,4 +1,39 @@
 <script setup>
+import { ref } from 'vue';
+
+const API_URL = "http://localhost:8000";
+
+const uploadFile = ref(null);
+const uploadDescription = ref("");
+const uploadUrl = ref("");
+
+const handleFileChange = (event) => {
+    uploadFile.value = event.target.files[0];
+    console.log(uploadFile.value);
+}
+
+function clearFile() {
+    uploadFile.value = null;
+    uploadDescription.value = "";
+}
+
+function upload() {
+    const formData = new FormData();
+    formData.append("file", uploadFile.value);
+    formData.append("description", uploadDescription.value);
+
+    fetch(`${API_URL}/upload`, {
+        method: "POST",
+        body: formData,
+    })
+    .then(response => response.json())
+    .then(data => {
+        console.log(data);
+    })
+    .catch(error => {
+        console.error(error);
+    });
+}
 
 </script>
 <template>
@@ -16,12 +51,24 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <input type="file" id="file-upload" class="d-none" accept="image/*">
-                    <label for="file-upload" class="btn btn-primary">上傳圖片</label>
+                    
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">描述</span>
+                        <input type="text" class="form-control" placeholder="描述" v-model="uploadDescription">
+                    </div>
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="inputGroupFile01">圖片</label>
+                        <input type="file" class="form-control" id="inputGroupFile01" accept="image/*" v-on:change="handleFileChange">
+                    </div>
+                    OR
+                    <div class="input-group mb-3">
+                        <label class="input-group-text" for="inputGroupFile01">網址</label>
+                        <input type="text" class="form-control" placeholder="網址" v-model="uploadUrl">
+                    </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary">Save changes</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" v-on:click="clearFile">Close</button>
+                    <button type="button" class="btn btn-primary" v-on:click="upload" data-bs-dismiss="modal">Save changes</button>
                 </div>
             </div>
         </div>

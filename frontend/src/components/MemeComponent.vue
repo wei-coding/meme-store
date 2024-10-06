@@ -1,11 +1,11 @@
 <script setup lang="ts">
 const props = defineProps<{
     imageUrl: string;
-    link: string;
+    description: string;
 }>();
 
 function copyLink() {
-    navigator.clipboard.writeText(props.link);
+    navigator.clipboard.writeText(props.imageUrl);
 }
 </script>
 
