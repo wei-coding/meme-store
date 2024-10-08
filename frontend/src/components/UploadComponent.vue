@@ -1,7 +1,9 @@
 <script setup>
 import { ref } from 'vue';
 
-const API_URL = "http://localhost:8000";
+const props = defineProps(['afterUpdate']);
+
+const API_URL = "/api";
 
 const uploadFile = ref(null);
 const uploadDescription = ref("");
@@ -19,8 +21,12 @@ function clearFile() {
 
 function upload() {
     const formData = new FormData();
+    const token = localStorage.getItem("token");
+
     formData.append("file", uploadFile.value);
+    formData.append("url", uploadUrl.value);
     formData.append("description", uploadDescription.value);
+    formData.append("token", token);
 
     fetch(`${API_URL}/upload`, {
         method: "POST",
@@ -29,6 +35,7 @@ function upload() {
     .then(response => response.json())
     .then(data => {
         console.log(data);
+        props.afterUpdate();
     })
     .catch(error => {
         console.error(error);
@@ -60,11 +67,11 @@ function upload() {
                         <label class="input-group-text" for="inputGroupFile01">圖片</label>
                         <input type="file" class="form-control" id="inputGroupFile01" accept="image/*" v-on:change="handleFileChange">
                     </div>
-                    OR
+                    <!-- OR
                     <div class="input-group mb-3">
                         <label class="input-group-text" for="inputGroupFile01">網址</label>
                         <input type="text" class="form-control" placeholder="網址" v-model="uploadUrl">
-                    </div>
+                    </div> -->
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" v-on:click="clearFile">Close</button>

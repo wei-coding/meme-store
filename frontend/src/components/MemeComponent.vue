@@ -11,7 +11,7 @@ function copyLink() {
 
 <template>
     <a v-on:click="copyLink">
-        <img :src="props.imageUrl" alt="範例圖片" class="image-item rounded">
+        <img :src="props.imageUrl" :alt="props.description" class="image-item rounded">
     </a>
 </template>
 

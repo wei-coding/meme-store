@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "bootstrap5": "^1.1.9",
+    "meme-store": ".",
     "vue": "^3.4.29",
     "vue-router": "^4.3.3"
   },
